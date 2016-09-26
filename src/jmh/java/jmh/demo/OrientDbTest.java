@@ -27,12 +27,18 @@ public class OrientDbTest {
             try {
                 personList = loadData();
                 deleteDir("/tmp/orientdb/");
-                db = new OObjectDatabaseTx("plocal:/tmp/orientdb/person").create();
-                db.getEntityManager().registerEntityClass(Person.class);
-            } finally {
-                if (db != null) {
-                    db.close();
+                db = new OObjectDatabaseTx("plocal:/tmp/orientdb/person");
+                if (db.exists()) {
+                    db.open("admin", "admin");
+                    db.drop();
                 }
+                db.create();
+                db.getEntityManager().registerEntityClass(Person.class);
+                db.getEntityManager().registerEntityClass(Address.class);
+                db.getEntityManager().registerEntityClass(PrivateData.class);
+            } catch (Throwable e) {
+                System.out.println("error in creating db ");
+                e.printStackTrace();
             }
         }
 
@@ -42,7 +48,6 @@ public class OrientDbTest {
             if (db != null) {
                 ODatabaseRecordThreadLocal.INSTANCE.set(db.getUnderlying());
                 db.commit();
-                db.drop();
                 db.close();
             }
         }
@@ -67,7 +72,8 @@ public class OrientDbTest {
         }
 
         private Person[] loadData() throws IOException {
-            InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("data.json");
+            InputStream inputStream = Thread.currentThread()
+                    .getContextClassLoader().getResourceAsStream("data.json");
             ObjectMapper objectMapper = new ObjectMapper();
             return objectMapper.readValue(inputStream, Person[].class);
         }
@@ -76,13 +82,14 @@ public class OrientDbTest {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    @Fork(0)
     public void benchmarkInsert(TestState state, Blackhole blackhole) {
         OObjectDatabaseTx db = state.db;
         Person[] personList = state.personList;
 
         if (db == null) {
             System.out.println("db null.. exiting");
-            return;
+            System.exit(0);
         }
 
         ODatabaseRecordThreadLocal.INSTANCE.set(db.getUnderlying());
