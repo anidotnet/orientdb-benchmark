@@ -1,0 +1,25 @@
+[
+  {
+    "firstname": "Abc",
+    "lastname": "Xyz",
+    "addresses": [
+      {
+        "street": "Some Street",
+        "zip": "254674"
+      },
+      {
+        "street": "Office Street",
+        "zip": "145879"
+      }
+    ],
+    "defaultAddress": {
+      "street": "Some Street",
+      "zip": "254674"
+    },
+    "privateData": {
+      "username": "user",
+      "password": "password"
+    },
+    "personalNote": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean massa nulla, elementum vitae velit nec, suscipit porttitor urna. Integer volutpat nibh et nisi congue ullamcorper. Cras laoreet consectetur massa a luctus. Etiam non sapien vitae enim semper elementum. Donec ullamcorper nibh quis magna vestibulum, eget faucibus sem posuere. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Ut sed nulla id risus ultricies facilisis. Curabitur scelerisque eros metus, in ultrices libero efficitur sit amet. Vivamus aliquet nec sapien sed vehicula. Praesent a mauris eget tortor consectetur euismod. Suspendisse tempus felis et ante dictum, nec eleifend tellus finibus."
+  }
+]

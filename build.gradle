@@ -1,0 +1,48 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'me.champeau.gradle:jmh-gradle-plugin:0.1'
+    }
+}
+
+plugins {
+    id "me.champeau.gradle.jmh" version "0.3.1"
+}
+
+repositories {
+    jcenter()
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+
+group 'jmh.demo'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = JavaVersion.VERSION_1_7
+targetCompatibility = JavaVersion.VERSION_1_7
+
+jmh {
+    jmhVersion = '1.14'
+    iterations = 10 // Number of measurement iterations to do.
+    fork = 2 // How many times to forks a single benchmark. Use 0 to disable forking altogether
+    jvmArgs = '-server -XX:MaxDirectMemorySize=15986m'
+    resultsFile = project.file("${project.buildDir}/reports/jmh/results.txt") // results file
+    profilers = ['cl', 'gc', 'hs_thr'] // Use profilers to collect additional data. Supported profilers: [cl, comp, gc, stack, perf, perfnorm, perfasm, xperf, xperfasm, hs_cl, hs_comp, hs_gc, hs_rt, hs_thr]
+    resultFormat = 'CSV' // Result format type (one of CSV, JSON, NONE, SCSV, TEXT)
+    threads = 4 // Number of worker threads to run with.
+    timeUnit = 'ms' // Output time unit. Available time units are: [m, s, ms, us, ns].
+    warmupForks = 2 // How many warmup forks to make for a single benchmark. 0 to disable warmup forks.
+    warmupIterations = 10 // Number of warmup iterations to do.
+}
+
+dependencies {
+    jmh group: 'com.orientechnologies', name: 'orientdb-object', version: '2.2.10'
+
+    compile group: 'org.openjdk.jmh', name: 'jmh-core', version: '1.14'
+    compile group: 'com.orientechnologies', name: 'orientdb-object', version: '2.2.10'
+    compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.8.2'
+}
